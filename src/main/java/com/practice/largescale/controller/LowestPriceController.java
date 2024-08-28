@@ -1,9 +1,8 @@
 package com.practice.largescale.controller;
 
 import com.practice.largescale.service.LowestPriceService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.practice.largescale.vo.Product;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
@@ -17,4 +16,10 @@ public class LowestPriceController {
     public Set GetZsetValue(String key){
         return myLowestPriceService.getZsetValue(key);
     }
+
+    @PutMapping("/product")
+    public int SetNewProduct(@RequestBody Product newProduct){
+        return myLowestPriceService.setNewProduct(newProduct);
+    }
+
 }
