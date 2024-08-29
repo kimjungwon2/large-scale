@@ -1,11 +1,13 @@
 package com.practice.largescale.service;
 
 import com.practice.largescale.vo.Product;
+import com.practice.largescale.vo.ProductGrp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -27,5 +29,16 @@ public class LowestPriceServiceImpl implements LowestPriceService {
         myProdPriceRedis.opsForZSet().add(newProduct.getProdGrpId(), newProduct.getProductId(), newProduct.getPrice());
         rank = myProdPriceRedis.opsForZSet().rank(newProduct.getProdGrpId(), newProduct.getProductId()).intValue();
         return rank;
+    }
+
+    @Override
+    public int setnewProductGrp(ProductGrp newProductGrp) {
+        List<Product> product = newProductGrp.getProductList();
+
+        String productId = product.get(0).getProductId();
+        int price = product.get(0).getPrice();
+        myProdPriceRedis.opsForZSet().add(newProductGrp.getProdGrpId(), productId, price);
+
+        return myProdPriceRedis.opsForZSet().zCard(newProductGrp.getProdGrpId()).intValue();
     }
 }
