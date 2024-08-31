@@ -28,4 +28,10 @@ public class LowestPriceController {
         return myLowestPriceService.setnewProductGrp(newProduct);
     }
 
+    @PutMapping("/productGroupToKeyword")
+    public int setNewProductGrpToKeyword(String keyword, String prodGrpId, double score){
+        return myLowestPriceService.setNewProductGrpToKeyword(keyword, prodGrpId, score);
+    }
+
+
 }

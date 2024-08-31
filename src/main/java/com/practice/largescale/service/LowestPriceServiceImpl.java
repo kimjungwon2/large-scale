@@ -41,4 +41,11 @@ public class LowestPriceServiceImpl implements LowestPriceService {
 
         return myProdPriceRedis.opsForZSet().zCard(newProductGrp.getProdGrpId()).intValue();
     }
+
+    public int setNewProductGrpToKeyword(String keyword, String prodGrpId, double score) {
+        myProdPriceRedis.opsForZSet().add(keyword, prodGrpId, score);
+        int rank = myProdPriceRedis.opsForZSet().rank(keyword, prodGrpId).intValue();
+
+        return rank;
+    }
 }
