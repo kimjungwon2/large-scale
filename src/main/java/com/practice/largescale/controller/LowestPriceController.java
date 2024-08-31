@@ -1,6 +1,7 @@
 package com.practice.largescale.controller;
 
 import com.practice.largescale.service.LowestPriceService;
+import com.practice.largescale.vo.Keyword;
 import com.practice.largescale.vo.Product;
 import com.practice.largescale.vo.ProductGrp;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,11 @@ public class LowestPriceController {
     @PutMapping("/productGroupToKeyword")
     public int setNewProductGrpToKeyword(String keyword, String prodGrpId, double score){
         return myLowestPriceService.setNewProductGrpToKeyword(keyword, prodGrpId, score);
+    }
+
+    @GetMapping("/productPrice/lowest")
+    public Keyword getLowestPriceProductByKeyword(String keyword){
+        return myLowestPriceService.getLowestPriceProductByKeyword(keyword);
     }
 
 

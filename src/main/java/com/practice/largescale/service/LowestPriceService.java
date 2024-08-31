@@ -1,5 +1,6 @@
 package com.practice.largescale.service;
 
+import com.practice.largescale.vo.Keyword;
 import com.practice.largescale.vo.Product;
 import com.practice.largescale.vo.ProductGrp;
 
@@ -14,4 +15,6 @@ public interface LowestPriceService {
     int setnewProductGrp(ProductGrp newProduct);
 
     int setNewProductGrpToKeyword(String keyword, String prodGrpId, double score);
+
+    Keyword getLowestPriceProductByKeyword(String keyword);
 }

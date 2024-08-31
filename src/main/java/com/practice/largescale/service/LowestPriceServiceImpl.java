@@ -1,11 +1,13 @@
 package com.practice.largescale.service;
 
+import com.practice.largescale.vo.Keyword;
 import com.practice.largescale.vo.Product;
 import com.practice.largescale.vo.ProductGrp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,5 +49,28 @@ public class LowestPriceServiceImpl implements LowestPriceService {
         int rank = myProdPriceRedis.opsForZSet().rank(keyword, prodGrpId).intValue();
 
         return rank;
+    }
+
+    @Override
+    public Keyword getLowestPriceProductByKeyword(String keyword) {
+        Keyword returnInfo = new Keyword();
+        List<ProductGrp> tempProductGrp = new ArrayList<>();
+
+        return returnInfo;
+    }
+
+    private List<ProductGrp> GetProductGrpUsingKeyword(String keyword) {
+        List<ProductGrp> returnInfo = new ArrayList<>();
+        ProductGrp tempProdGrp = new ProductGrp();
+
+        List<String> prodGrpIdList = new ArrayList<>();
+        prodGrpIdList = List.copyOf(myProdPriceRedis.opsForZSet().range(keyword, 0, 9));
+
+        for (final String prodGrpId : prodGrpIdList) {
+            Set prodAndPriceList = new HashSet();
+            prodAndPriceList = myProdPriceRedis.opsForZSet().rangeWithScores(prodGrpId, 0, 9);
+        }
+
+        return returnInfo;
     }
 }
