@@ -1,5 +1,6 @@
 package com.practice.largescale.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practice.largescale.vo.Keyword;
 import com.practice.largescale.vo.Product;
 import com.practice.largescale.vo.ProductGrp;
@@ -7,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class LowestPriceServiceImpl implements LowestPriceService {
@@ -55,6 +53,10 @@ public class LowestPriceServiceImpl implements LowestPriceService {
     public Keyword getLowestPriceProductByKeyword(String keyword) {
         Keyword returnInfo = new Keyword();
         List<ProductGrp> tempProductGrp = new ArrayList<>();
+        tempProductGrp = GetProductGrpUsingKeyword(keyword);
+
+        returnInfo.setKeyword(keyword);
+        returnInfo.setProductGrpList(tempProductGrp);
 
         return returnInfo;
     }
@@ -66,9 +68,31 @@ public class LowestPriceServiceImpl implements LowestPriceService {
         List<String> prodGrpIdList = new ArrayList<>();
         prodGrpIdList = List.copyOf(myProdPriceRedis.opsForZSet().range(keyword, 0, 9));
 
+        Product tempProduct = new Product();
+        List<Product> tempProdList = new ArrayList<>();
+
+
         for (final String prodGrpId : prodGrpIdList) {
             Set prodAndPriceList = new HashSet();
             prodAndPriceList = myProdPriceRedis.opsForZSet().rangeWithScores(prodGrpId, 0, 9);
+            Iterator<Object> prodPriceObj = prodAndPriceList.iterator();
+
+            while(prodPriceObj.hasNext()){
+                ObjectMapper objMapper = new ObjectMapper();
+
+                // {"value":00-1001
+                Map<String, String> prodPriceMap = objMapper.convertValue(prodPriceObj.next(),Map.class);
+
+                // Product Obj bind
+                tempProduct.setProductId(prodPriceMap.get("value"));
+                tempProduct.setPrice(Integer.parseInt(prodPriceMap.get("score")));
+                tempProdList.add(tempProduct);
+            }
+
+            // 10개 입력 완료.
+            tempProdGrp.setProdGrpId(prodGrpId);
+            tempProdGrp.setProductList(tempProdList);
+            returnInfo.add(tempProdGrp);
         }
 
         return returnInfo;
