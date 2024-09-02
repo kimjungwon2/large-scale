@@ -23,6 +23,17 @@ public class LowestPriceServiceImpl implements LowestPriceService {
         return myTempSet;
     }
 
+    public Set getZsetValueWithStatus(String key) throws Exception {
+        Set myTempSet = new HashSet();
+        myTempSet = myProdPriceRedis.opsForZSet().rangeWithScores(key, 0, 9);
+        if(myTempSet.size() <1){
+            throw new Exception("The key doesn't have any member");
+        }
+
+        return myTempSet;
+    }
+
+
     @Override
     public int setNewProduct(Product newProduct) {
         int rank = 0;

@@ -2,9 +2,10 @@ package com.practice.largescale.controller;
 
 import com.practice.largescale.service.LowestPriceService;
 import com.practice.largescale.vo.Keyword;
-import com.practice.largescale.vo.Product;
 import com.practice.largescale.vo.ProductGrp;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Set;
 
@@ -14,15 +15,23 @@ public class LowestPriceController {
 
     private LowestPriceService myLowestPriceService;
 
-    @GetMapping("/getZSETValue")
+    @GetMapping("/product")
     public Set GetZsetValue(String key){
         return myLowestPriceService.getZsetValue(key);
     }
 
-    @PutMapping("/product")
-    public int SetNewProduct(@RequestBody Product newProduct){
-        return myLowestPriceService.setNewProduct(newProduct);
+
+
+    @GetMapping("/product1")
+    public Set GetZsetValueWithStatus(String key){
+        try{
+            return myLowestPriceService.getZsetValueWithStatus(key);
+        } catch (Exception ex) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        }
     }
+
 
     @PutMapping("/productGroup")
     public int SetNewProductGroup(@RequestBody ProductGrp newProduct){

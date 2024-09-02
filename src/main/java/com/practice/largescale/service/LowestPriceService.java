@@ -10,6 +10,8 @@ public interface LowestPriceService {
 
     Set getZsetValue(String key);
 
+    Set getZsetValueWithStatus(String key) throws Exception;
+
     int setNewProduct(Product newProduct);
 
     int setnewProductGrp(ProductGrp newProduct);
