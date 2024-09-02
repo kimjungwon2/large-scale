@@ -3,10 +3,13 @@ package com.practice.largescale.controller;
 import com.practice.largescale.service.LowestPriceService;
 import com.practice.largescale.vo.Keyword;
 import com.practice.largescale.vo.ProductGrp;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @RestController
@@ -30,6 +33,30 @@ public class LowestPriceController {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }
+    }
+
+    @GetMapping("/product2")
+    public Set GetZsetValueUsingExController(String key) throws Exception{
+        try{
+            return myLowestPriceService.getZsetValueWithStatus(key);
+        } catch (Exception ex) {
+            throw new Exception(ex);
+        }
+    }
+
+    @GetMapping("/product3")
+    public ResponseEntity<Set> GetZsetValueUsingExControllerWithSpecificException(String key) throws Exception{
+        Set<String> mySet = new HashSet<>();
+
+        try{
+            mySet =  myLowestPriceService.getZsetValueWithStatus(key);
+        } catch (Exception ex) {
+            throw new Exception(ex);
+        }
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+
+        return new ResponseEntity<Set>(mySet, responseHeaders, HttpStatus.OK);
     }
 
 
