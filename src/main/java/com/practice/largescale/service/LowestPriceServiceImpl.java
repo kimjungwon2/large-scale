@@ -2,10 +2,12 @@ package com.practice.largescale.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practice.largescale.vo.Keyword;
+import com.practice.largescale.vo.NotFoundException;
 import com.practice.largescale.vo.Product;
 import com.practice.largescale.vo.ProductGrp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -27,7 +29,7 @@ public class LowestPriceServiceImpl implements LowestPriceService {
         Set myTempSet = new HashSet();
         myTempSet = myProdPriceRedis.opsForZSet().rangeWithScores(key, 0, 9);
         if(myTempSet.size() <1){
-            throw new Exception("The key doesn't have any member");
+            throw new NotFoundException("The key doesn't have any member", HttpStatus.NOT_FOUND);
         }
 
         return myTempSet;

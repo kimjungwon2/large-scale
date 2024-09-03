@@ -14,14 +14,21 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExController {
 
     @ExceptionHandler({Exception.class})
-    @Order(1)
+    @Order(2)
     public ResponseEntity<Object> NotFoundExceptionResponse(NotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @Order(2)
+    @Order(3)
     @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> EveryException(final Exception ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
+    @Order(1)
+    @ExceptionHandler({NotFoundException.class})
+    public ResponseEntity<Object> NotFoundException(NotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

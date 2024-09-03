@@ -2,6 +2,7 @@ package com.practice.largescale.controller;
 
 import com.practice.largescale.service.LowestPriceService;
 import com.practice.largescale.vo.Keyword;
+import com.practice.largescale.vo.NotFoundException;
 import com.practice.largescale.vo.ProductGrp;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -50,8 +51,8 @@ public class LowestPriceController {
 
         try{
             mySet =  myLowestPriceService.getZsetValueWithStatus(key);
-        } catch (Exception ex) {
-            throw new Exception(ex);
+        } catch (NotFoundException ex) {
+            throw new NotFoundException(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
 
         HttpHeaders responseHeaders = new HttpHeaders();
